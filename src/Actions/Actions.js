@@ -5,3 +5,8 @@ export const logIn = () => ({
 export const logOut = () => ({
 	type: 'LOG_OUT',
 })
+
+export const updateActiveQuestion = (question) => ({
+  type: 'UPDATE_QUESTION',
+  payload: question
+})

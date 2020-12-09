@@ -1,6 +1,6 @@
 // const state = []
 
-const answeredQuestionsReducer = (state = [], action) => {
+const answeredQuestionsReducer = (state = [2], action) => {
 	switch (action.type) {
 		case 'NEXT_QUESTION':
 			return addQuestionToAnswered(state, action.payload)
