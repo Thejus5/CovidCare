@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react'
 import Login from './Components/Login/Login'
 import Questionnaire from './Components/Questionnaire/Questionnaire'
 import { useSelector, useDispatch } from 'react-redux'
-import { logIn, updateActiveQuestion } from './Actions/Actions'
+import { logIn } from './Actions/Actions'
 
 let COMPANY_CODES = null
-let ALL_QUESTIONS = null
+let ALL_QUESTIONS = []
 
 function App() {
 	// Life cycle hooks (fOR api CALL)
@@ -17,10 +17,10 @@ function App() {
 			COMPANY_CODES = res.data.companyCodes
 			ALL_QUESTIONS = res.data.questions
 
-			let num = answeredQuestions.pop()
-			console.log(answeredQuestions.pop())
-			console.log(num)
-			console.log(ALL_QUESTIONS.find((question) => question.questionNumber === num))
+			// let num = answeredQuestions.pop()
+			// console.log(answeredQuestions.pop())
+			// console.log(num)
+			// console.log(ALL_QUESTIONS.find((question) => question.questionNumber === num))
 
 			// let num = [...answeredQuestions].splice(-1, 1)
 			// console.log(answeredQuestions.splice(-1,1))
@@ -35,8 +35,8 @@ function App() {
 	// redux items
 	const dispatch = useDispatch()
 	const loggedInStatus = useSelector((state) => state.loggedIn)
-	const answeredQuestions = useSelector((state) => state.answeredQuestions)
-	const activeQuestion = useSelector((state) => state.activeQuestion)
+	// const answeredQuestions = useSelector((state) => state.answeredQuestions)
+	// const activeQuestion = useSelector((state) => state.activeQuestion)
 
 	// Methods
 	const validateCompanyCode = () => {
@@ -49,7 +49,6 @@ function App() {
 			}
 		}
 	}
-
 	const logInUser = (code) => {
 		dispatch(logIn())
 	}
@@ -62,20 +61,20 @@ function App() {
 		setInvalidCompanyCode(false)
 	}
 
-	const questionSelector = ()=>{
-		let nextQnNumber = answeredQuestions.pop() || 0
-		console.log((nextQnNumber))
-		if(nextQnNumber === 3) console.log('both are same')
-		const nextQuestion = ALL_QUESTIONS.find((question) => {
-			console.log(question)
-			if(question.questionNumber === nextQnNumber){
-				console.log('Selected qn:'+question)
-				return question
-			}
-		})
-		console.log(nextQuestion)
-		return (nextQuestion.questionNumber)
-	}
+	// const questionSelector = ()=>{
+	// 	let nextQnNumber = answeredQuestions.pop() || 0
+	// 	console.log((nextQnNumber))
+	// 	if(nextQnNumber === 3) console.log('both are same')
+	// 	const nextQuestion = ALL_QUESTIONS.find((question) => {
+	// 		console.log(question)
+	// 		if(question.questionNumber === nextQnNumber){
+	// 			console.log('Selected qn:'+question)
+	// 			return question
+	// 		}
+	// 	})
+	// 	console.log(nextQuestion)
+	// 	return (nextQuestion.questionNumber)
+	// }
 
 	const test = () => {
 		return 'hi'
@@ -84,7 +83,7 @@ function App() {
 	return (
 		<div className="App">
 			{loggedInStatus ? (
-				<Questionnaire question={questionSelector()} />
+				<Questionnaire questions={ALL_QUESTIONS} />
 			) : (
 				<Login login={validateCompanyCode} isInvalidCode={invalidCompanyCode} change={clearErrorMsg} />
 			)}

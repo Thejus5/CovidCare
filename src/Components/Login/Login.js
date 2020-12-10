@@ -15,7 +15,7 @@ const login = (props) => {
 					onChange={props.change}
 				/>
 				{props.isInvalidCode ? <p className={classes.errorMessage}>Invalid Company code</p> : null}
-				<Button clicked={props.login}>Login</Button>
+				<Button clicked={props.login} type={'full'}>Login</Button>
 			</div>
 		</div>
 	)

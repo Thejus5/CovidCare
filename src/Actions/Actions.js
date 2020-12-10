@@ -1,5 +1,5 @@
 export const logIn = () => ({
-  type: 'LOG_IN',
+	type: 'LOG_IN',
 })
 
 export const logOut = () => ({
@@ -7,6 +7,10 @@ export const logOut = () => ({
 })
 
 export const updateActiveQuestion = (question) => ({
-  type: 'UPDATE_QUESTION',
-  payload: question
+	type: 'NEXT_QUESTION',
+	payload: question,
+})
+
+export const removeCurrentQuestion = () => ({
+	type: 'PREVIOUS_QUESTION',
 })

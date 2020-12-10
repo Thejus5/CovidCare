@@ -1,0 +1,17 @@
+.toolbar {
+	height: 10vh;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	background-color: #07806e;
+	margin-bottom: 30px;
+}
+
+.toolbar > img {
+	height: 50%;
+	width: auto;
+}
+
+.toolbar > p {
+	color: #fff;
+}

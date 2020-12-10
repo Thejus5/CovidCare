@@ -1,0 +1,51 @@
+.mainContainer {
+	width: 100%;
+	height: 90vh;
+}
+.buttonsContainer {
+	width: 70%;
+	margin: 0 auto;
+	padding: 10px;
+	padding-top: 20px;
+	display: flex;
+	justify-content: center;
+	background-color: #b7d6ca;
+}
+
+.btnBox {
+	width: 40%;
+	margin: 0 5px;
+}
+
+.textareaContainer {
+	width: 70%;
+	margin: 0 auto;
+	background-color: #b7d6ca;
+	padding: 10px;
+}
+
+.textareaContainer > textarea {
+	width: 70%;
+	margin: 0 auto;
+	height: 90px;
+	border-radius: 5px;
+	border: 1px solid #b7d6ca;
+	resize: none;
+	outline: none;
+}
+
+.dateContainer {
+	width: 70%;
+	margin: 0 auto;
+	background-color: #b7d6ca;
+	padding: 10px;
+}
+
+.dateContainer > input{
+	width: 70%;
+	margin: 0 auto;
+	border-radius: 5px;
+	border: 1px solid #b7d6ca;
+	outline: none;
+	padding: 10px;
+}

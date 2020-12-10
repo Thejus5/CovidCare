@@ -1,0 +1,12 @@
+.optionDiv{
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  background-color:  #b7d6ca;
+  padding: 10px;
+  justify-content: center;
+}
+
+.options{
+  width: 40%;
+}
