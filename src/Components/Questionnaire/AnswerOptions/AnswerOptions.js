@@ -13,8 +13,12 @@ const Options = (props) => {
 				</div>
 			)
 		}
+
 		return element
 	}
+
+	
+
 	return <div className={classes.optionDiv}>{createRadioButtons()}</div>
 }
 

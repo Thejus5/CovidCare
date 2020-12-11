@@ -20,6 +20,7 @@ const Questionnaire = (props) => {
 	let answeredQuestions = useSelector((state) => state.answeredQuestions)
 
 	useEffect(() => {
+		turnOffRadioButtons()
 		if (answeredQuestions.length === 0) setActiveQuestion(props.questions[0])
 		else setActiveQuestion(filterOutQuestion())
 	})
@@ -91,6 +92,11 @@ const Questionnaire = (props) => {
 		ANSWERS_TO_DESCRIPTIVE_QUESTIONS = newAnswers
 	}
 
+	const turnOffRadioButtons = () => {
+		console.log(document.querySelectorAll('input'))
+		document.querySelectorAll('input').forEach((input) => (input.checked = false))
+	}
+
 	useEffect(() => {
 		setSubQuestionExist(false)
 		USER_ANSWERED_QUESTION = false
@@ -103,7 +109,7 @@ const Questionnaire = (props) => {
 				<Result results={COVID_PATIENT_FOR_QUESTION} allAnswers={ANSWERS_TO_DESCRIPTIVE_QUESTIONS} />
 			) : (
 				<div className={classes.mainContainer}>
-					<Question question={activeQuestion.question} />
+					<Question question={activeQuestion.question} number={activeQuestion.questionNumber} />
 					{activeQuestion.type === 'radio' ? (
 						<Options options={activeQuestion.options} changed={onAnswer} />
 					) : (
@@ -114,7 +120,7 @@ const Questionnaire = (props) => {
 
 					{subQuestionExist && activeQuestion.type === 'radio' ? (
 						<div>
-							<Question question={activeQuestion.subQuestion.question} />
+							<Question question={activeQuestion.subQuestion.question} number={null} />
 							{activeQuestion.subQuestion.type === 'radio' ? (
 								<Options options={activeQuestion.options} changed={onSubQuestion} />
 							) : activeQuestion.subQuestion.type === 'date' ? (
