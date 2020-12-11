@@ -13,18 +13,7 @@ const Options = (props) => {
 				</div>
 			)
 		}
-
 		return element
-		// options.forEach(console.log('Hi'))
-		// props.options.map((option) => {
-		//   console.log(option)
-		// 	return (
-		// 		<div>
-		// 			<input type="radio" id={option.answer} name="gender" value={option.answer} />
-		// 			<label for={option.answer}>Female</label>
-		// 		</div>
-		// 	)
-		// })
 	}
 	return <div className={classes.optionDiv}>{createRadioButtons()}</div>
 }

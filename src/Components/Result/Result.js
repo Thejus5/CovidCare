@@ -1,7 +1,12 @@
 import Pass from './Positive/Positive'
 import Fail from './Negative/Negative'
+import {useEffect} from 'react'
 
-const result = (props)=>{
+const Result = (props)=>{
+  useEffect(()=>{
+    console.log(props.allAnswers)
+  })
+  
   let numberOfQuestionsInList = Object.keys(props.results).length
   return (
     <div>
@@ -10,4 +15,4 @@ const result = (props)=>{
   )
 }
 
-export default result
+export default Result

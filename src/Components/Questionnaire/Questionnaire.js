@@ -10,16 +10,16 @@ import Result from '../Result/Result'
 import classes from './Questionnaire.module.css'
 
 let COVID_PATIENT_FOR_QUESTION = {}
+let ANSWERS_TO_DESCRIPTIVE_QUESTIONS = {}
+let USER_ANSWERED_QUESTION = false
 
 const Questionnaire = (props) => {
 	let dispatch = useDispatch()
 	const [activeQuestion, setActiveQuestion] = useState({})
 	const [subQuestionExist, setSubQuestionExist] = useState(false)
-	const [covidPossibility, setCovidPossibility] = useState(false)
 	let answeredQuestions = useSelector((state) => state.answeredQuestions)
 
 	useEffect(() => {
-		console.log('Beginning cycle')
 		if (answeredQuestions.length === 0) setActiveQuestion(props.questions[0])
 		else setActiveQuestion(filterOutQuestion())
 	})
@@ -29,13 +29,8 @@ const Questionnaire = (props) => {
 		return props.questions.find((question) => question.questionNumber === nextQnNumber[0] + 1)
 	}
 
-	const tst = () => {
-		if (activeQuestion.type === 'desc') console.log(activeQuestion.type)
-		else console.log(activeQuestion.options)
-	}
-
 	const updateAnsweredQuestions = () => {
-		dispatch(updateActiveQuestion(activeQuestion.questionNumber))
+		if (USER_ANSWERED_QUESTION) dispatch(updateActiveQuestion(activeQuestion.questionNumber))
 	}
 
 	const removeQuestionFromList = () => {
@@ -51,10 +46,12 @@ const Questionnaire = (props) => {
 				return
 			}
 		}
+		USER_ANSWERED_QUESTION = true
 		setSubQuestionExist(false)
 	}
 
 	const onSubQuestion = (e) => {
+		USER_ANSWERED_QUESTION = true
 		if (activeQuestion.subQuestion.options) checkAnswerForCovid(e, activeQuestion.subQuestion.options)
 	}
 
@@ -62,10 +59,9 @@ const Questionnaire = (props) => {
 		let optionsToConfirmCovid = options.filter((option) => option.points == 1)
 		if (optionsToConfirmCovid.length > 0) {
 			markCovid(event, optionsToConfirmCovid)
-		}
-		else{
+		} else {
 			let optionsToDeleteCovid = options.filter((option) => option.points == 0)
-			deleteCovid(event,optionsToDeleteCovid)
+			deleteCovid(event, optionsToDeleteCovid)
 		}
 	}
 
@@ -74,19 +70,14 @@ const Questionnaire = (props) => {
 			let questionNumber = JSON.stringify(activeQuestion.questionNumber)
 			if (option.answer == eventToCheck.target.value) {
 				COVID_PATIENT_FOR_QUESTION = { ...COVID_PATIENT_FOR_QUESTION, [questionNumber]: true }
-				console.log(COVID_PATIENT_FOR_QUESTION)
 			} else {
-				console.log('REASIGNING out')
 				delete COVID_PATIENT_FOR_QUESTION[questionNumber]
-				// if (Object.keys(COVID_PATIENT_FOR_QUESTION).includes(questionNumber)) {
-				// 	console.log('REASIGNING')
-				// }
 			}
 		})
 	}
 
 	const deleteCovid = (eventToCheck, optionsToDeleteCovid) => {
-		optionsToDeleteCovid.forEach(option=>{
+		optionsToDeleteCovid.forEach((option) => {
 			let questionNumber = JSON.stringify(activeQuestion.questionNumber)
 			if (option.answer == eventToCheck.target.value) {
 				delete COVID_PATIENT_FOR_QUESTION[questionNumber]
@@ -94,16 +85,22 @@ const Questionnaire = (props) => {
 		})
 	}
 
+	const storeDescriptiveAnswers = (e) => {
+		if (e.target.value.length > 0) USER_ANSWERED_QUESTION = true
+		let newAnswers = { ...ANSWERS_TO_DESCRIPTIVE_QUESTIONS, [activeQuestion.questionNumber]: e.target.value }
+		ANSWERS_TO_DESCRIPTIVE_QUESTIONS = newAnswers
+	}
+
 	useEffect(() => {
 		setSubQuestionExist(false)
-		// 	setActiveQuestion(filterOutQuestion())
+		USER_ANSWERED_QUESTION = false
 	}, [answeredQuestions])
 
 	return (
 		<Aux>
 			<Toolbar />
 			{answeredQuestions.length >= props.questions.length ? (
-				<Result results={COVID_PATIENT_FOR_QUESTION} />
+				<Result results={COVID_PATIENT_FOR_QUESTION} allAnswers={ANSWERS_TO_DESCRIPTIVE_QUESTIONS} />
 			) : (
 				<div className={classes.mainContainer}>
 					<Question question={activeQuestion.question} />
@@ -111,7 +108,7 @@ const Questionnaire = (props) => {
 						<Options options={activeQuestion.options} changed={onAnswer} />
 					) : (
 						<div className={classes.textareaContainer}>
-							<textarea autoFocus />
+							<textarea autoFocus onChange={storeDescriptiveAnswers} />
 						</div>
 					)}
 
@@ -122,22 +119,24 @@ const Questionnaire = (props) => {
 								<Options options={activeQuestion.options} changed={onSubQuestion} />
 							) : activeQuestion.subQuestion.type === 'date' ? (
 								<div className={classes.dateContainer}>
-									<input type="date" />
+									<input type="date" onChange={storeDescriptiveAnswers} />
 								</div>
 							) : (
 								<div className={classes.textareaContainer}>
-									<textarea autoFocus />
+									<textarea autoFocus onChange={storeDescriptiveAnswers} />
 								</div>
 							)}
 						</div>
 					) : null}
 
 					<div className={classes.buttonsContainer}>
-						<div className={classes.btnBox}>
-							<Button clicked={removeQuestionFromList} type={'Not full'}>
-								Previous
-							</Button>
-						</div>
+						{activeQuestion.questionNumber !== 1 ? (
+							<div className={classes.btnBox}>
+								<Button clicked={removeQuestionFromList} type={'Not full'}>
+									Previous
+								</Button>
+							</div>
+						) : null}
 						<div className={classes.btnBox}>
 							<Button clicked={updateAnsweredQuestions} type={'full'}>
 								Next
@@ -151,4 +150,3 @@ const Questionnaire = (props) => {
 }
 
 export default Questionnaire
-//{activeQuestion.type !== 'desc' ? <Options options={activeQuestion.options}/>  : <textarea/> }

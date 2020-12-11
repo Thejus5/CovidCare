@@ -1,0 +1,12 @@
+.congoImg{
+  height: 120px;
+  width: auto;
+}
+
+.container{
+  background-color: #b7d6ca;
+  padding: 10px;
+  width: 50%;
+  margin: 0 auto;
+  border-radius: 5px;
+}
