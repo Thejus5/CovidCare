@@ -17,8 +17,6 @@ const Options = (props) => {
 		return element
 	}
 
-	
-
 	return <div className={classes.optionDiv}>{createRadioButtons()}</div>
 }
 

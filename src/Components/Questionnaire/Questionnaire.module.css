@@ -24,7 +24,7 @@
 	padding: 10px;
 }
 
-.textareaContainer > textarea {
+.textareaContainer > input {
 	width: 70%;
 	margin: 0 auto;
 	height: 90px;

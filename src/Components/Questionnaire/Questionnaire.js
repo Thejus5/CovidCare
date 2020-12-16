@@ -12,6 +12,7 @@ import classes from './Questionnaire.module.css'
 let COVID_PATIENT_FOR_QUESTION = {}
 let ANSWERS_TO_DESCRIPTIVE_QUESTIONS = {}
 let USER_ANSWERED_QUESTION = false
+let RADIO_TO_CHECK = null
 
 const Questionnaire = (props) => {
 	let dispatch = useDispatch()
@@ -21,6 +22,12 @@ const Questionnaire = (props) => {
 
 	useEffect(() => {
 		turnOffRadioButtons()
+
+		if (RADIO_TO_CHECK !== null) {
+			let radioButton = document.querySelector(`#${RADIO_TO_CHECK}`)
+			if (radioButton) radioButton.checked = true
+			RADIO_TO_CHECK = null
+		}
 		if (answeredQuestions.length === 0) setActiveQuestion(props.questions[0])
 		else setActiveQuestion(filterOutQuestion())
 	})
@@ -41,12 +48,15 @@ const Questionnaire = (props) => {
 	const onAnswer = (e) => {
 		if (activeQuestion.options) checkAnswerForCovid(e, activeQuestion.options)
 		if (activeQuestion.subQuestion) {
+			RADIO_TO_CHECK = e.target.id
+			document.querySelector(`#${e.target.id}`).checked = true
 			let optionToCheck = activeQuestion.options.find((option) => option.enableSubQn)
 			if (e.target.value == optionToCheck.answer) {
 				setSubQuestionExist(true)
 				return
 			}
 		}
+	
 		USER_ANSWERED_QUESTION = true
 		setSubQuestionExist(false)
 	}
@@ -93,7 +103,6 @@ const Questionnaire = (props) => {
 	}
 
 	const turnOffRadioButtons = () => {
-		console.log(document.querySelectorAll('input'))
 		document.querySelectorAll('input').forEach((input) => (input.checked = false))
 	}
 
@@ -114,7 +123,7 @@ const Questionnaire = (props) => {
 						<Options options={activeQuestion.options} changed={onAnswer} />
 					) : (
 						<div className={classes.textareaContainer}>
-							<textarea autoFocus onChange={storeDescriptiveAnswers} />
+							<input type="number" onChange={storeDescriptiveAnswers} />
 						</div>
 					)}
 
@@ -156,3 +165,4 @@ const Questionnaire = (props) => {
 }
 
 export default Questionnaire
+
